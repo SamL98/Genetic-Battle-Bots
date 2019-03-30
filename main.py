@@ -5,6 +5,9 @@ import genetic as gen
 import numpy as np
 import time
 
+num_sensors = 8
+num_actioncells = 3
+num_memcells = 0
 
 def orthonormal_vector(theta):
     tant = np.tan(theta)
@@ -13,15 +16,36 @@ def orthonormal_vector(theta):
     v = c
     return -u, -v
 
+def agent_fitness(agents):
+    hit_weight = 1
+    dist_weight = 10
+    lives_weight = 100
+    acc_weight = 10
+    
+    fitness = []
+    for agent in agents:
+        acc = agent.num_hits / agent.num_attacks
+        
+        ind_fit = acc_weight * acc
+        ind_fit += hit_weight * agent.num_hits
+        ind_fit += dist_weight * agent.distance_moved
+        ind_fit += lives_weight * agent.lives_remaining
+        
+        fitness.append(ind_fit)
+        
+    return fitness
+        
 
 class World(object):
     
-    def __init__(self):
+    def __init__(self, brains):
+        
         self.world_h = 100
         self.world_w = 100
-        self._agents = [RangeAgent(25, 75, 5, 10, 1, 0, 45, self.world_h, self.world_w, 3),
-                        RangeAgent(75, 25, 5, 45, 0, 1, 45, self.world_h, self.world_w, 3)]
-        self._brains = gen.random_generation(2, (6, 10), (10, 10))
+        self._agents = [RangeAgent(self.world_h * x, self.world_w * y, 3, 10, 40, 0, 45, self.world_h, self.world_w, 3)
+                        for x, y in np.random.rand(brains[0].shape[0], 2)]
+        self._brains = brains
+        self._memories = np.zeros((self._brains[0].shape[0], num_memcells))
         self._bullets = []
 
         
@@ -83,9 +107,6 @@ class World(object):
         rays = self.calc_rays()
 
         # Enemy present
-        # Bullet present
-        self.calc_rays()
-
         enemy_present = [False] * len(self._agents)
         for i, agent in enumerate(self._agents):
             for enemy in self._agents:
@@ -96,7 +117,7 @@ class World(object):
                 enemy_present[i] = enemy_in_view
                 if enemy_in_view:
                     break
-
+        # Bullet present
         e_present = np.array(enemy_present).astype(np.uint8)[:,np.newaxis]
 
         bullet_present = [False] * len(self._agents)
@@ -109,27 +130,40 @@ class World(object):
 
         b_present = np.array(bullet_present).astype(np.uint8)[:,np.newaxis]
 
-        return np.hstack((headings, fovs, rays, e_present, b_present))
+        return np.hstack((headings, fovs, rays, e_present, b_present)) #, self._memories))
 
     def process_ai(self):
         inputs = self.collect_inputs()
-
         behav_vectors = nn.forward_prop(inputs, self._brains)
         phys_info = []
         for i, agent in enumerate(self._agents):
             lr, dfov, bullets = agent.choose_action(behav_vectors[i])
             phys_info.append((lr, dfov))
             self._bullets.extend(bullets)
+            self._memories[i] = behav_vectors[i][num_actioncells:]
                 
         return phys_info
         
     def update_physics(self, phys_info, dt):
-        for bullet in self._bullets:
-            bullet.update(dt, self._agents)
+        bullets_to_remove = []
+        try:
+            for i, bullet in enumerate(self._bullets):
+                bullet.update(dt, self._agents)
+                if not bullet.in_world:
+                    bullets_to_remove.append(i)
+        except:
+            breakpoint()
+                
+        for bullet in reversed(bullets_to_remove):
+            self._bullets.pop(bullet)
+
                 
         for i, agent in enumerate(self._agents):
-            agent.update(*phys_info[i], dt, self._agents)
-            print(agent.circ.y)
+            if not agent.dead:
+                agent.update(*phys_info[i], dt, self._agents)
+
+    def is_finished(self):
+        pass
         
         
 class MainGame(object):
@@ -150,19 +184,37 @@ class MainGame(object):
     def render(self):
         pass
         
+    def is_finished(self):
+        return False
     
 
 if __name__ == "__main__":
     
     keep_going = True
-    world = World()
+    starting_population = gen.random_generation(50, (num_sensors + num_memcells, 10), (10, 10),(10, num_actioncells + num_memcells))
+    world = World(starting_population)
     game = MainGame(world)
     
+    max_time = 0.5 * 60
+    
     now = time.time()
+    start_time = now
+    
+    gen_number = 0
     while keep_going:
-        game.handle_input()
-        actions = game.process_ai()
-        game.update_physics(actions, now - time.time())
-        game.render()
+        print(f"Generation Number: {gen_number}")
+        while (now - start_time) < max_time and not game.is_finished():
+            print(f"{now - start_time}")
+            game.handle_input()
+            actions = game.process_ai()
+            print(sum(agent.num_hits for agent in game.world._agents))
+            game.update_physics(actions, now - time.time())
+            game.render()
+            now = time.time()
+        gen_number += 1
+        fitness = agent_fitness(game.world._agents)
+        children = gen.breed(world._brains, fitness, world._brains[0].shape[0])
+        game.world = World(children)
         
-        now = time.time()
+        start_time = time.time()
+        now = start_time
