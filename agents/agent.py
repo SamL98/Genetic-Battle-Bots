@@ -5,6 +5,8 @@ from enum import Enum
 import numpy as np
 
 from steering_direction import SteeringDirection
+from circle import Circle
+
 import physics.collision as co
 import physics.motion as mo
 
@@ -41,12 +43,15 @@ class Agent(GameObject):
         self.fov = max(self.fov, 0)
         self.fov = min(self.fov, 179.9)
 
-        walls_hit = co.detect_circle_wall_collisions(self.circ, *self.world_dims)
+        walls_hit = co.detect_circle_wall_collisions(self.circ, self.vx, self.vy, *self.world_dims)
         if len(walls_hit) > 0:
-            d, v = co.execute_wall_collision_response(self.circ, self.vx, self.vy, walls_hit)  
+            v = co.execute_wall_collision_response(self.circ, self.vx, self.vy, walls_hit)  
             self.vx, self.vy = v
-            dx, dy = d
-            self.circ = Circle(self.circ.x+dx, self.circ.y+dy, self.circ.r)
+            x, y = self.circ.x, self.circ.y
+            x = min(max(0, x), self.world_dims[1])
+            y = min(max(0, y), self.world_dims[1])
+
+            self.circ = Circle(x, y, self.circ.r)
             self.walls_hit += len(walls_hit)
 
         for obj in objects:

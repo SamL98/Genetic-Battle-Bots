@@ -13,7 +13,7 @@ class Bullet(GameObject):
 
     def update(self, dt, objects):
         super().update(dt)
-        walls_hit = co.detect_circle_wall_collisions(self.circ, *self.world_dims)
+        walls_hit = co.detect_circle_wall_collisions(self.circ, self.vx, self.vy, *self.world_dims)
         if len(walls_hit) > 0:
             self.in_world = False
             return

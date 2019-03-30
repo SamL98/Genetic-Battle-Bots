@@ -5,7 +5,7 @@ from circle import Circle
 from melee_arc import MeleeArc
 from wall import Wall
 
-def detect_circle_wall_collisions(c, w, h):
+def detect_circle_wall_collisions(c, vx, vy, w, h):
         '''
         Detect what walls, if any the circle is colliding with
 
@@ -21,10 +21,10 @@ def detect_circle_wall_collisions(c, w, h):
         walls = []
         bbox = {'x': c.x - c.r, 'y': c.y - c.r, 'w': 2*c.r, 'h': 2*c.r}
 
-        if bbox['x'] <= 0: walls.append(Wall.West)
-        if bbox['y'] <= 0: walls.append(Wall.North)
-        if bbox['x']+bbox['w'] >= w: walls.append(Wall.East)
-        if bbox['y']+bbox['h'] >= h: walls.append(Wall.South)
+        if bbox['x'] <= 0 and vx < 0: walls.append(Wall.West)
+        if bbox['y'] <= 0 and vy < 0: walls.append(Wall.North)
+        if bbox['x']+bbox['w'] >= w and vx > 0: walls.append(Wall.East)
+        if bbox['y']+bbox['h'] >= h and vy > 0: walls.append(Wall.South)
         
         return walls
 
@@ -42,17 +42,13 @@ def execute_wall_collision_response(c, vx, vy, walls):
         """
 
         new_vx, new_vy = vx, vy
-        del_x, del_y = 0, 0
         
         if Wall.East or Wall.West in walls: 
             new_vy *= -1
-            del_x = 2
         if Wall.North or Wall.South in walls: 
             new_vx *= -1
-            del_y = 2
 
-        print(vx, vy, new_vx, new_vy)
-        return (del_x, del_y), (new_vx, new_vy)
+        return (new_vx, new_vy)
 
 def detect_circle_circle_collision(c1, c2):
         '''
