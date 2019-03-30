@@ -25,7 +25,11 @@ def agent_fitness(agents):
     
     fitness = []
     for agent in agents:
-        acc = agent.num_hits / agent.num_attacks
+        
+        if agent.num_attacks > 0:
+            acc = agent.num_hits / agent.num_attacks
+        else:
+            acc = 0
         
         ind_fit = acc_weight * acc
         ind_fit += hit_weight * agent.num_hits
