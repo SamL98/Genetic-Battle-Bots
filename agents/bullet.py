@@ -22,6 +22,14 @@ class Bullet(GameObject):
             self.in_world = False
             return
 
+        if self.circ.x < 0 or self.circ.x > self.world_w:
+            self.in_world = False
+            return
+
+        if self.circ.y < 0 or self.circ.y > self.world_h:
+            self.in_world = False
+            return
+
         for obj in objects:
             if not issubclass(type(obj), Agent):
                 continue
