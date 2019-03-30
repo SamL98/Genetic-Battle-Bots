@@ -1,5 +1,5 @@
 from enum import Enum
 
-class SteeringDirection(enum):
+class SteeringDirection(Enum):
 	Left = 'left'
-	Right  = 'right
+	Right  = 'right'

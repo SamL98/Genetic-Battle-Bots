@@ -21,9 +21,9 @@ def detect_circle_wall_collisions(c, w, h):
 	walls = []
 	bbox = {x: c.x - c.r, y: c.y - c.r, w: 2*c.r, h: 2*c.r}
 
-	if bbox.x <= 0: walls.append(Wall.East)
+	if bbox.x <= 0: walls.append(Wall.West)
 	if bbox.y <= 0: walls.append(Wall.North)
-	if bbox.x >= w: walls.append(Wall.West)
+	if bbox.x >= w: walls.append(Wall.East)
 	if bbox.y >= h: walls.append(Wall.South)
 	
 	return walls
