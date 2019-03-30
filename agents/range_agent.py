@@ -7,7 +7,7 @@ class RangeAgent(Agent):
         def __init__(self, x, y, r, theta, v, fov, w, h, num_lives):
                 super().__init__(x, y, r, v, theta, fov, w, h, num_lives)
                 self.agent_type = AgentType.Range
-                self.cooldown_time = 0.75
+                self.cooldown_time = 2
                 self.last_attack_time = 0
                 
                 self.shot_magnitude = 10
