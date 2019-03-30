@@ -43,7 +43,7 @@ class World(object):
         
         self.world_h = 100
         self.world_w = 100
-        self._agents = [RangeAgent(self.world_h * x, self.world_w * y, 3, 10, 40, 0, 45, self.world_h, self.world_w, 3)
+        self._agents = [RangeAgent(self.world_h * x, self.world_w * y, 3, 10, 10, 40, self.world_h, self.world_w, 3)
                         for x, y in np.random.rand(brains[0].shape[0], 2)]
         self._brains = brains
         self._memories = np.zeros((self._brains[0].shape[0], num_memcells))
@@ -190,7 +190,7 @@ class MainGame(object):
     
 
 if __name__ == "__main__":
-    render = False
+    render = True
 
     if render:
         import cv2 as cv
