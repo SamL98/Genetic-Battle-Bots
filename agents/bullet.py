@@ -22,11 +22,11 @@ class Bullet(GameObject):
             self.in_world = False
             return
 
-        if self.circ.x < 0 or self.circ.x > self.world_w:
+        if self.circ.x < 0 or self.circ.x > self.world_dims[1]:
             self.in_world = False
             return
 
-        if self.circ.y < 0 or self.circ.y > self.world_h:
+        if self.circ.y < 0 or self.circ.y > self.world_dims[0]:
             self.in_world = False
             return
 
