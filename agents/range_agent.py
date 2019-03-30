@@ -13,6 +13,8 @@ class RangeAgent(Agent):
                 self.shot_magnitude = 10
 
         def attack(self):
+                if self.dead: return
+
                 if time()-self.last_attack_time < self.cooldown_time:
                         return
 

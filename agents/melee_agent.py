@@ -38,6 +38,7 @@ class MeleeAgent(Agent):
 				self.num_hits += 1
 
 	def attack(self):
+		if self.dead: return
 		if self.melee_active:
 			return
 
