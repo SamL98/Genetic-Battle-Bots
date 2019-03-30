@@ -20,7 +20,7 @@ def orthonormal_vector(theta):
 def agent_fitness(agents):
     hit_weight = 100
     dist_weight = 10
-    lives_weight = 100
+    lives_weight = 10
     acc_weight = 1000
     
     fitness = []
@@ -224,7 +224,7 @@ if __name__ == "__main__":
 
             if render:
                 game.render()
-                k = cv.waitKey(60)
+                k = cv.waitKey(1)
                 if k == 27:
                     break
 
