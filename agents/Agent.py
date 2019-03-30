@@ -17,6 +17,8 @@ class Agent(GameObject):
 		super().__init__(x, y, r, vx, vy, world_w, world_h)
 		self.theta = theta
 		self.theta_step = 5
+                
+                self.fov = fov
 
 		self.num_lives = num_lives
 		self.dead = False
