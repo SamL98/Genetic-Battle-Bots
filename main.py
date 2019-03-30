@@ -5,6 +5,7 @@ import genetic as gen
 import numpy as np
 import time
 
+
 def orthonormal_vector(theta):
     tant = np.tan(theta)
     c = - np.sqrt(1 / ( tant ** 2 + 1))
@@ -52,6 +53,24 @@ class World(object):
                 rays.append((min(ns_b, ns_r), min(ns_t, ns_l), min(ew_b, ew_l), min(ew_t, ew_r)))
                 
         return np.stack(rays)
+
+    def is_in_view(self, agent, obj):
+        theta = agent.theta*np.pi/180
+        fov = agent.fov*np.pi/180
+        x, y = agent.circ.x, agent.circ.y
+
+        m1 = np.tan(theta-fov/2)
+        b1 = y - m1*x
+
+        m2 = np.tan(theta+fov/2)
+        b2 = y - m2*x
+        
+        if theta > np.pi/2 and theta < 3*np.pi/2:
+            m1, m2 = m2, m1
+            b1, b2 = b2, b1
+            
+        ex, ey = obj.circ.x, obj.circ.y
+        return ey >= (m1*ex+b1) and ey <= (m2*ex + b2)
             
     def collect_inputs(self):
         # Heading
@@ -65,10 +84,33 @@ class World(object):
 
         # Enemy present
         # Bullet present
-        
-        return np.hstack((headings, fovs, rays))
+        self.calc_rays()
 
-            
+        enemy_present = [False] * len(self._agents)
+        for i, agent in enumerate(self._agents):
+            for enemy in self._agents:
+                if agent == enemy:
+                    continue
+
+                enemy_in_view = self.is_in_view(agent, enemy)
+                enemy_present[i] = enemy_in_view
+                if enemy_in_view:
+                    break
+
+        e_present = np.array(enemy_present).astype(np.uint8)[:,np.newaxis]
+
+        bullet_present = [False] * len(self._agents)
+        for i, agent in enumerate(self._agents):
+            for bullet in self._bullets:
+                bullet_in_view = self.is_in_view(agent, bullet)
+                bullet_present[i] = bullet_in_view
+                if bullet_in_view:
+                    break
+
+        b_present = np.array(bullet_present).astype(np.uint8)[:,np.newaxis]
+
+        return np.hstack((headings, fovs, rays, e_present, b_present))
+
     def process_ai(self):
         inputs = self.collect_inputs()
 
