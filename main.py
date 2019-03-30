@@ -17,10 +17,10 @@ def orthonormal_vector(theta):
     return -u, -v
 
 def agent_fitness(agents):
-    hit_weight = 1
+    hit_weight = 100
     dist_weight = 10
     lives_weight = 100
-    acc_weight = 10
+    acc_weight = 1000
     
     fitness = []
     for agent in agents:
@@ -29,7 +29,7 @@ def agent_fitness(agents):
         ind_fit = acc_weight * acc
         ind_fit += hit_weight * agent.num_hits
         ind_fit += dist_weight * agent.distance_moved
-        ind_fit += lives_weight * agent.lives_remaining
+        ind_fit += lives_weight * agent.num_lives
         
         fitness.append(ind_fit)
         
@@ -146,13 +146,12 @@ class World(object):
         
     def update_physics(self, phys_info, dt):
         bullets_to_remove = []
-        try:
-            for i, bullet in enumerate(self._bullets):
-                bullet.update(dt, self._agents)
-                if not bullet.in_world:
-                    bullets_to_remove.append(i)
-        except:
-            breakpoint()
+
+        for i, bullet in enumerate(self._bullets):
+            bullet.update(dt, self._agents)
+            if not bullet.in_world:
+                bullets_to_remove.append(i)
+
                 
         for bullet in reversed(bullets_to_remove):
             self._bullets.pop(bullet)
@@ -200,21 +199,25 @@ if __name__ == "__main__":
     now = time.time()
     start_time = now
     
+    fitness_history = []
+    
     gen_number = 0
     while keep_going:
         print(f"Generation Number: {gen_number}")
         while (now - start_time) < max_time and not game.is_finished():
-            print(f"{now - start_time}")
             game.handle_input()
             actions = game.process_ai()
-            print(sum(agent.num_hits for agent in game.world._agents))
             game.update_physics(actions, now - time.time())
             game.render()
             now = time.time()
         gen_number += 1
         fitness = agent_fitness(game.world._agents)
+        print(sorted(fitness))
+        fitness_history.append(fitness)
         children = gen.breed(world._brains, fitness, world._brains[0].shape[0])
         game.world = World(children)
         
         start_time = time.time()
         now = start_time
+
+        np.mean
