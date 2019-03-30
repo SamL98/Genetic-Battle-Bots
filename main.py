@@ -58,15 +58,15 @@ class World(object):
         for agent in self._agents:
             ns_vec = np.array([np.cos(agent.theta), np.sin(agent.theta)])
             ew_vec = np.array(orthonormal_vector(agent.theta))
-            ns_b = np.abs((self.world_h - agent.circ.y) / ns_vec[0])
-            ns_t = np.abs(-agent.circ.y / ns_vec[0])
-            ns_l = np.abs((self.world_w - agent.circ.x) / ns_vec[1])
-            ns_r = np.abs(-agent.circ.x / ns_vec[1])
+            ns_b = np.abs((self.world_h - agent.circ.y) / np.maximum(1e-7, ns_vec[0]))
+            ns_t = np.abs(-agent.circ.y / np.maximum(1e-7, ns_vec[0]))
+            ns_l = np.abs((self.world_w - agent.circ.x) / np.maximum(1e-7, ns_vec[1]))
+            ns_r = np.abs(-agent.circ.x / np.maximum(1e-7, ns_vec[1]))
             
-            ew_b = np.abs((self.world_h - agent.circ.y) / ew_vec[0])
-            ew_t = np.abs(-agent.circ.y / ew_vec[0])
-            ew_l = np.abs((self.world_w - agent.circ.x) / ew_vec[1])
-            ew_r = np.abs(-agent.circ.x / ew_vec[1])
+            ew_b = np.abs((self.world_h - agent.circ.y) / np.maximum(1e-7, ew_vec[0]))
+            ew_t = np.abs(-agent.circ.y / np.maximum(1e-7, ew_vec[0]))
+            ew_l = np.abs((self.world_w - agent.circ.x) / np.maximum(1e-7, ew_vec[1]))
+            ew_r = np.abs(-agent.circ.x / np.maximum(1e-7, ew_vec[1]))
 
             if 0 < agent.theta and agent.theta <= 90:
                 rays.append((min(ns_t, ns_r), min(ns_b, ns_l), min(ew_b, ew_r), min(ew_t, ew_l)))
@@ -220,6 +220,9 @@ if __name__ == "__main__":
 
             if render:
                 game.render()
+                k = cv.waitKey(60)
+                if k == 27:
+                    break
 
             now = time.time()
 
