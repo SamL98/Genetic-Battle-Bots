@@ -6,10 +6,9 @@ from circle import Circle
 
 class GameObject(object):
 	def __init__(self, x, y, r, vx, vy, world_w, world_h):
-		self.circ = ph.Circle(x, y, r)
+		self.circ = Circle(x, y, r)
 		self.vx = vx
 		self.vy = vy
-		self.fov = fov
 		self.world_dims = (world_w, world_h)
 
 	def update(self, dt):

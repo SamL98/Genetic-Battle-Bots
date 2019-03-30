@@ -8,17 +8,19 @@ from steering_direction import SteeringDirection
 import physics.collision as co
 import physics.motion as mo
 
+from .game_object import GameObject
+
 class AgentType(Enum):
-        Melee = 'melee'
-        Range = 'range'
+	Melee = 'melee'
+	Range = 'range'
+	Normal = 'normal'
 
 class Agent(GameObject):
-        def __init__(self, x, y, r, theta, vx, vy, fov, world_w, world_h, num_lives):
-                super().__init__(x, y, r, vx, vy, world_w, world_h)
-                self.theta = theta
-                self.theta_step = 5
-                
-                self.fov = fov
+	def __init__(self, x, y, r, theta, vx, vy, fov, world_w, world_h, num_lives):
+		super().__init__(x, y, r, vx, vy, world_w, world_h)
+		self.theta = theta
+		self.theta_step = 5
+		self.fov = fov
 
                 self.num_lives = num_lives
                 self.dead = False
@@ -29,9 +31,11 @@ class Agent(GameObject):
                 self.times_hit = 0
                 self.walls_hit = 0
 
-        def update(self, lr, dfov, dt, objects):
-                if self.dead:
-                        return
+		self.agent_type = AgentType.Normal
+
+	def update(self, lr, dfov, dt, objects):
+		if self.dead:
+			return
 
                 self.fov += dfov
 
