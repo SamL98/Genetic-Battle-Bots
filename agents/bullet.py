@@ -23,5 +23,6 @@ class Bullet(GameObject):
 				continue
 
 			if co.detect_circle_circle_collision(self.circ, obj.circ):
+                self.in_world = False
 				obj.get_hit()
 				self.spawning_agent.num_hits += 1
