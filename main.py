@@ -21,7 +21,7 @@ def orthonormal_vector(theta):
 def agent_fitness(agents):
     hit_weight = 100
     dist_weight = 10
-    lives_weight = 100
+    lives_weight = 10
     acc_weight = 1000
     
     fitness = []
