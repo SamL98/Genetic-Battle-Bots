@@ -22,7 +22,7 @@ def adjust_xy(x, y, ax, theta):
 		x = ax
 	return x, y
 
-def render_circ(agent, canvas):
+def render_agent(agent, canvas):
 	factor = 10
 	w = agent.world_dims[1] * factor
 
@@ -63,5 +63,4 @@ def render_circ(agent, canvas):
 		rad = agent.circ.r + agent.melee_r
 		m_theta = agent.m_theta
 		start = agent.theta - m_theta/2 
-		print(start, start+m_theta, rad)
-		cv.ellipse(canvas, (x, y), (rad, rad), 0, start, start+agent.m_theta, BLACK, LW)
+		cv.ellipse(canvas, (x, y), (rad, rad), 0, 360-start, 360-(start+m_theta), BLACK, LW)

@@ -5,6 +5,8 @@ from .agent import Agent, AgentType
 from melee_arc import MeleeArc
 import physics.collision as co
 
+from time import time
+
 class MeleeAgent(Agent):
 	def __init__(self, x, y, r, theta, vx, vy, fov, w, h, num_lives, m_theta, m_r):
 		super().__init__(x, y, r, theta, vx, vy, fov, w, h, num_lives)
@@ -12,7 +14,7 @@ class MeleeAgent(Agent):
 		self.m_theta = m_theta
 		self.melee_r = m_r
 		self.melee_active = False
-		self.max_melee_time = 0.5
+		self.max_melee_time = 0.75
 		self.melee_time = 0
 
 	def update(self, lr, dfov, dt, objects):
@@ -36,8 +38,12 @@ class MeleeAgent(Agent):
 				self.num_hits += 1
 
 	def attack(self):
+		if self.melee_active:
+			return
+
 		super.attack()
 		self.melee_active = True
+		self.melee_time = time()
 		self.melee_arc = MeleeArc(self.melee_r, self.theta - self.m_theta/2, self.m_theta)
 
 	def choose_action(self, behavior_vec):
