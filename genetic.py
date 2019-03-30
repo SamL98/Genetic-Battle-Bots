@@ -12,7 +12,7 @@ def random_generation(n_organisms, *brain_structure):
     
     generation = []
     for struct in brain_structure:
-        generation.append(np.random.rand(n_organisms, *struct))
+        generation.append(10 * np.random.rand(n_organisms, *struct) - 5)
         
     return generation
 
@@ -88,7 +88,7 @@ def random_fitness(organsism):
     return np.random.rand(organsism[0].shape[0])
 
 # Breed
-def breed(organisms, fit_scores, n_children):
+def breed(organisms, fit_scores, n_children, keep_best=2):
     """Breeds the organisms based on their fitness scores.
 
     organsisms: the list of weight matrices
@@ -97,12 +97,17 @@ def breed(organisms, fit_scores, n_children):
 
     n_children: the size of the population of children
     """
-    choose_prob = np.cumsum(fit_scores)
-    choose_prob = choose_prob / choose_prob[-1]
-
+    
     pairs = []
     
-    for i in range(n_children):
+    best_orgs = np.argsort(fit_scores)[::-1]
+    for i in range(keep_best):
+        pairs.append((best_orgs[i], best_orgs[i]))
+    
+    choose_prob = np.cumsum(fit_scores)
+    choose_prob = choose_prob / choose_prob[-1]
+    
+    for i in range(n_children - keep_best):
         left, right = np.random.rand(2)
         left = np.argmin(choose_prob < left)
         right = np.argmin(choose_prob < right)
