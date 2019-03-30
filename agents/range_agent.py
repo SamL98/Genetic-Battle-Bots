@@ -1,4 +1,4 @@
-from agent import Agent, AgentType
+from .agent import Agent, AgentType
 
 class RangeAgent(Agent):
 	def __init__(self, x, y, r, theta, vx, vy, fov, w, h, num_lives):
