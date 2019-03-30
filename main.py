@@ -21,21 +21,14 @@ def orthonormal_vector(theta):
 def agent_fitness(agents):
     hit_weight = 100
     dist_weight = 10
-    lives_weight = 10
+    lives_weight = 100
     acc_weight = 1000
-    miss_weight = -100
     
     fitness = []
     for agent in agents:
-        if agent.num_attacks > 0:
-            acc = agent.num_hits / agent.num_attacks
-        else:
-            acc = 0
-    
-        misses = agent.num_attacks - agent.num_hits
-            
+        acc = agent.num_hits / agent.num_attacks
+        
         ind_fit = acc_weight * acc
-        ind_fit += miss_weight * misses
         ind_fit += hit_weight * agent.num_hits
         ind_fit += dist_weight * agent.distance_moved
         ind_fit += lives_weight * agent.num_lives
@@ -51,6 +44,7 @@ class World(object):
         
         self.world_h = 100
         self.world_w = 100
+
         self._agents = [RangeAgent(self.world_h * x, self.world_w * y, 3, 10, 10, 40, self.world_h, self.world_w, 3)
                         for x, y in np.random.rand(brains[0].shape[0], 2)]
         self._brains = brains
@@ -171,8 +165,7 @@ class World(object):
                 agent.update(*phys_info[i], dt, self._agents)
 
     def is_finished(self):
-        one_left = sum(not agent.dead for agent in self._agents) == 1
-        return one_left == 1
+        pass
         
         
 class MainGame(object):
@@ -195,7 +188,7 @@ class MainGame(object):
         cv.imshow('canvas', canvas)
         
     def is_finished(self):
-        return self.world.is_finished()
+        return False
     
 
 if __name__ == "__main__":

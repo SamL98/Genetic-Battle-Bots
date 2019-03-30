@@ -64,6 +64,10 @@ class Agent(GameObject):
                 continue
 
             if co.detect_circle_circle_collision(self.circ, obj.circ):
+                ang = np.arctan2(self.circ.y-obj.circ.y, self.circ.x-obj.circ.x)
+                x = self.circ.x + np.cos(ang*np.pi/180)*(self.circ.r+obj.circ.r)
+                y = self.circ.y + np.sin(ang*np.pi/180)*(self.circ.r+obj.circ.r)
+                self.circ = Circle(x, y, self.circ.r)
                 return
 
         dtheta = mo.update_velocity(lr, self.theta_step)
