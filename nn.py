@@ -16,14 +16,14 @@ def forward_prop(x, weights):
 	Return the behavior vector given the environment and network weights.
 
 	Params:
-		x: The environment (input) vector
-		weights: A list of matrices
+		x: The environment (input) matrix - one row per organism
+		weights: A list of weight tensors - num organism x input x output length
 
 	Returns:
-		The behavior (output) vector
+		The behavior (output) matrix - one row per organism
 	'''
 
-	output = x
+	output = x[...,np.newaxis]
 	for W in weights:
-		output = W.dot(output)
-	return output	
+		output = W @ output
+	return output.reshape(output.shape[:-1])	
