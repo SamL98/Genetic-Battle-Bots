@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '..')
+
 from circle import Circle
 from melee_arc import MeleeArc
 from wall import Wall

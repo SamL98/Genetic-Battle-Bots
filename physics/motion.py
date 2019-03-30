@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '..')
+
 import numpy as np
 from steering_direction import SteeringDirection
 
@@ -40,4 +43,4 @@ def update_velocity(vx, vy, lr, theta_step=5):
 	v_mag = np.sqrt(vx**2 + vy**2)
 
 	new_theta = v_theta + dtheta
-	return (v_mag * np.cos(new_theta), v_mag * np.sin(new_theta))
+	return (v_mag * np.cos(new_theta), v_mag * np.sin(new_theta), dtheta)
