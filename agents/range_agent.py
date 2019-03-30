@@ -1,4 +1,5 @@
 from .agent import Agent, AgentType
+from .bullet import Bullet
 
 class RangeAgent(Agent):
 	def __init__(self, x, y, r, theta, vx, vy, fov, w, h, num_lives):
@@ -7,7 +8,7 @@ class RangeAgent(Agent):
 
 	def attack(self):
 		super().attack()
-		bullet = Bullet(self.x, self.y, self.y, self.vx, self.vy, *self.world_dims, self) 
+		bullet = Bullet(self.circ.x, self.circ.y, self.circ.r, self.vx, self.vy, *self.world_dims, self) 
 		return bullet
 
 	def choose_action(self, behavior_vec):

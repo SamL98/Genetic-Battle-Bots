@@ -39,7 +39,7 @@ def update_velocity(vx, vy, lr, theta_step=5):
 	if lr == SteeringDirection.Right:
 		dtheta *= -1
 
-	v_theta = np.atan(vy/np.max(1e-7, vx))
+	v_theta = np.arctan(vy/np.maximum(1e-7, vx))
 	v_mag = np.sqrt(vx**2 + vy**2)
 
 	new_theta = v_theta + dtheta
