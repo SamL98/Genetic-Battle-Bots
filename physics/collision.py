@@ -2,7 +2,7 @@ from circle import Circle
 from melee_arc import MeleeArc
 from wall import Wall
 
-def detect_circle_wall_collision(c, w, h):
+def detect_circle_wall_collisions(c, w, h):
 	'''
 	Detect what walls, if any the circle is colliding with
 
