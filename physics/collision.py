@@ -1,5 +1,49 @@
 from circle import Circle
 from melee_arc import MeleeArc
+from wall import Wall
+
+def detect_circle_wall_collision(c, w, h):
+	'''
+	Detect what walls, if any the circle is colliding with
+
+	Params:
+		c: The circle
+		w: Width of the world
+		h: Height of the world
+
+	Returns:
+		A list of Walls that the circle is colliding with
+	'''
+
+	walls = []
+	bbox = {x: c.x - c.r, y: c.y - c.r, w: 2*c.r, h: 2*c.r}
+
+	if bbox.x <= 0: walls.append(Wall.East)
+	if bbox.y <= 0: walls.append(Wall.North)
+	if bbox.x >= w: walls.append(Wall.West)
+	if bbox.y >= h: walls.append(Wall.South)
+	
+	return walls
+
+def execute_wall_collision_response(c, vx, vy, walls):
+	'''	
+	Updates the velocity of the circle depending on what walls it's colliding with
+
+	Params:
+		c: The circle
+		vx, vy: The components of the velocity
+		walls: The walls that are in collision with the circle
+
+	Returns:
+		The new (vx, vy) of the circle
+	'''	
+
+	new_vx, new_vy = vx, vy
+	
+	if Wall.East or Wall.West in walls: new_vy *= -1
+	if Wall.North or Wall.South in walls: new_vx *= -1
+
+	return (new_vx, new_vy)
 
 def detect_circle_circle_collision(c1, c2):
 	'''
