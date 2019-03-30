@@ -23,5 +23,7 @@ class RangeAgent(Agent):
 		lr, dfov, shd_attack = super().choose_action(behavior_vec)
 		bullets = []
 		if shd_attack:
-			bullets.append(self.attack())
+			bullet = self.attack()
+			if bullet:
+				bullets.append(bullet)
 		return lr, dfov, bullets

@@ -17,9 +17,17 @@ a.fov = 50
 cv.namedWindow('canvas')
 
 for _ in range(360):
-    sleep(0.25) 
     canv = 255*np.ones((200, 200, 3), dtype=np.uint8)
     render.render_agent(a, canv)
     cv.imshow('canvas', canv)
+
+    a.theta = a.theta + 1
+    a.fov = a.fov + 1
+    if a.fov >= 90:
+        a.fov = a.fov - 1
+
+    k = cv.waitKey(20)
+    if k == 27:
+        break
 
 cv.destroyAllWindows()
