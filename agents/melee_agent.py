@@ -14,7 +14,7 @@ class MeleeAgent(Agent):
 		self.m_theta = m_theta
 		self.melee_r = m_r
 		self.melee_active = False
-		self.max_melee_time = 0.75
+		self.max_melee_time = 4
 		self.melee_time = 0
 
 	def update(self, lr, dfov, dt, objects):
@@ -41,7 +41,7 @@ class MeleeAgent(Agent):
 		if self.melee_active:
 			return
 
-		super.attack()
+		super().attack()
 		self.melee_active = True
 		self.melee_time = time()
 		self.melee_arc = MeleeArc(self.melee_r, self.theta - self.m_theta/2, self.m_theta)

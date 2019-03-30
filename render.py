@@ -75,4 +75,4 @@ def render(agents, bullets, h, w):
 		render_agent(agent, canv)
 	for bullet in bullets:
 		render_bullet(bullet, canv)
-	return cav
+	return canv

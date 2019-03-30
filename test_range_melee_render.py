@@ -20,7 +20,7 @@ ar = RangeAgent(x, y, r, v, theta, fov, 200, 200, 3)
 x, y = 25, 25
 theta = 240
 fov = 20
-v = 10
+v = 20
 m_theta = 75
 m_r = 10
 
