@@ -5,6 +5,7 @@ import genetic as gen
 import numpy as np
 import time
 import render as rend
+import pickle
 
 num_sensors = 8
 num_actioncells = 3
@@ -224,6 +225,8 @@ if __name__ == "__main__":
                     break
 
             now = time.time()
+
+        pickle.dump(game.world._brains, open('brains.pkl', 'wb'))
 
         gen_number += 1
         fitness = agent_fitness(game.world._agents)
