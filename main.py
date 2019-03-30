@@ -4,6 +4,7 @@ import nn
 import genetic as gen
 import numpy as np
 import time
+import render as rend
 
 num_sensors = 8
 num_actioncells = 3
@@ -181,14 +182,20 @@ class MainGame(object):
         self.world.update_physics(actions, dt)
         
     def render(self):
-        pass
+        canvas = rend.render(self.world._agents, self.world._bullets, self.world.world_h, self.world.world_w)
+        cv.imshow('canvas', canvas)
         
     def is_finished(self):
         return False
     
 
 if __name__ == "__main__":
-    
+    render = False
+
+    if render:
+        import cv2 as cv
+        cv.namedWindow('canvas')
+
     keep_going = True
     starting_population = gen.random_generation(50, (num_sensors + num_memcells, 10), (10, 10),(10, num_actioncells + num_memcells))
     world = World(starting_population)
@@ -204,12 +211,17 @@ if __name__ == "__main__":
     gen_number = 0
     while keep_going:
         print(f"Generation Number: {gen_number}")
+
         while (now - start_time) < max_time and not game.is_finished():
             game.handle_input()
             actions = game.process_ai()
             game.update_physics(actions, now - time.time())
-            game.render()
+
+            if render:
+                game.render()
+
             now = time.time()
+
         gen_number += 1
         fitness = agent_fitness(game.world._agents)
         print(sorted(fitness))
@@ -221,3 +233,6 @@ if __name__ == "__main__":
         now = start_time
 
         np.mean
+
+    if render:
+        cv.destroyAllWindows()

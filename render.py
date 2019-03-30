@@ -68,3 +68,11 @@ def render_agent(agent, canvas):
 def render_bullet(bullet, canvas):
 	x, y = bullet.circ.x, bullet.circ.y
 	cv.circle(canvas, (int(x), int(y)), bullet.circ.r, BLACK, -1)
+
+def render(agents, bullets, h, w):
+	canv = 255 * np.zeros((h, w, 3), dtype=np.uint8)
+	for agent in agents:
+		render_agent(agent, canv)
+	for bullet in bullets:
+		render_bullet(bullet, canv)
+	return cav
