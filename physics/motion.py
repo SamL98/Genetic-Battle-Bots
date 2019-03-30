@@ -35,7 +35,7 @@ def update_velocity(vx, vy, lr, theta_step=5):
 		The new (vx, vy) velocity
 	'''
 
-	dtheta = -theta_step
+	dtheta = theta_step
 	if lr == SteeringDirection.Right:
 		dtheta *= -1
 

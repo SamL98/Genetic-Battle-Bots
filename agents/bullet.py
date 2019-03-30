@@ -19,7 +19,7 @@ class Bullet(GameObject):
             return
 
         for obj in objects:
-            if not type(obj) == Agent:
+            if not issubclass(type(obj), Agent):
                 continue
 
             if obj.dead:

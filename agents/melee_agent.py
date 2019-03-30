@@ -30,7 +30,7 @@ class MeleeAgent(Agent):
 			return
 
 		for obj in objects:
-			if not type(obj) == Agent:
+			if not issubclass(type(obj), Agent):
 				continue
 
 			if co.detect_circle_melee_arc_collision(obj.circ, self.circ, self.melee_arc):

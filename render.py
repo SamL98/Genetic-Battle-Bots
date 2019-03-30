@@ -57,10 +57,10 @@ def render_agent(agent, canvas):
 
 	cv.polylines(canvas, [pts], True, (0, 0, 0), LW)
 
-	cv.circle(canvas, (x, y), circ.r, BLACK, -1)
+	cv.circle(canvas, (int(x), int(y)), circ.r, BLACK, -1)
 
 	if agent.agent_type == AgentType.Melee and agent.melee_active:
 		rad = agent.circ.r + agent.melee_r
 		m_theta = agent.m_theta
 		start = agent.theta - m_theta/2 
-		cv.ellipse(canvas, (x, y), (rad, rad), 0, 360-start, 360-(start+m_theta), BLACK, LW)
+		cv.ellipse(canvas, (int(x), int(y)), (rad, rad), 0, 360-start, 360-(start+m_theta), BLACK, LW)

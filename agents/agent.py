@@ -46,7 +46,7 @@ class Agent(GameObject):
         self.walls_hit += len(walls_hit)
 
         for obj in objects:
-            if not type(obj) == Agent or obj == self:
+            if not issubclass(type(obj), Agent) or obj == self:
                 continue
 
             if obj.dead:
