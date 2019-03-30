@@ -2,7 +2,7 @@ import render
 from circle import Circle
 from agents.agent import Agent
 from agents.melee_agent import MeleeAgent
-from agent.range_agent import RangeAgent
+from agents.range_agent import RangeAgent
 
 import numpy as np
 import cv2 as cv
@@ -19,3 +19,7 @@ cv.namedWindow('canvas')
 for _ in range(360):
     sleep(0.25) 
     canv = 255*np.ones((200, 200, 3), dtype=np.uint8)
+    render.render_agent(a, canv)
+    cv.imshow('canvas', canv)
+
+cv.destroyAllWindows()
