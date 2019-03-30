@@ -14,7 +14,6 @@ def get_fov_line_params(x, y, theta):
 	return m, b
 
 def adjust_xy(x, y, ax, theta):
-	print(-theta, np.pi/2, 3*np.pi/2)
 	if -theta < 3*np.pi/2 and -theta > np.pi/2:
 		x *= -1
 	elif -theta == np.pi/2 or -theta == 3*np.pi/2:
@@ -55,14 +54,14 @@ def render_circ(agent, canvas):
 		[x1, y1],
 		[x2, y2]
 	], dtype=np.int32)
-	print(pts)
 
 	cv.polylines(canvas, [pts], True, (0, 0, 0), LW)
 
 	cv.circle(canvas, (x, y), circ.r, BLACK, -1)
 
 	if agent.agent_type == AgentType.Melee and agent.melee_active:
-		rad = agent.r + agent.m_r
-		m_theta = agent.m_theta*np.pi/180
+		rad = agent.circ.r + agent.melee_r
+		m_theta = agent.m_theta
 		start = agent.theta - m_theta/2 
-		cv.ellipse(canvas, (x, y), (rad, rad), 0, start, agent.m_theta, BLACK, LW)
+		print(start, start+m_theta, rad)
+		cv.ellipse(canvas, (x, y), (rad, rad), 0, start, start+agent.m_theta, BLACK, LW)

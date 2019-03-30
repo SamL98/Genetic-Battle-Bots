@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, '..')
 
-from agent import Agent, AgentType
+from .agent import Agent, AgentType
 from melee_arc import MeleeArc
 import physics.collision as co
 

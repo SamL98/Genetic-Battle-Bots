@@ -49,6 +49,9 @@ class Agent(GameObject):
             if not type(obj) == Agent or obj == self:
                 continue
 
+            if obj.dead:
+                continue
+
             if co.detect_circle_circle_collision(self.circ, obj.circ):
                 return
 

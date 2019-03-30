@@ -22,6 +22,9 @@ class Bullet(GameObject):
 			if not type(obj) == Agent:
 				continue
 
+            if obj.dead:
+                continue
+
 			if co.detect_circle_circle_collision(self.circ, obj.circ):
                 self.in_world = False
 				obj.get_hit()
