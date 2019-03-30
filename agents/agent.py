@@ -42,8 +42,9 @@ class Agent(GameObject):
         self.fov = min(self.fov, 179.9)
 
         walls_hit = co.detect_circle_wall_collisions(self.circ, *self.world_dims)
-        self.vx, self.vy = co.execute_wall_collision_response(self.circ, self.vx, self.vy, walls_hit)  
-        self.walls_hit += len(walls_hit)
+        if len(walls_hit) > 0:
+            self.vx, self.vy = co.execute_wall_collision_response(self.circ, self.vx, self.vy, walls_hit)  
+            self.walls_hit += len(walls_hit)
 
         for obj in objects:
             if not issubclass(type(obj), Agent) or obj == self:

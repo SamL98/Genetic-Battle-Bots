@@ -23,8 +23,8 @@ def detect_circle_wall_collisions(c, w, h):
 
         if bbox['x'] <= 0: walls.append(Wall.West)
         if bbox['y'] <= 0: walls.append(Wall.North)
-        if bbox['x'] >= w: walls.append(Wall.East)
-        if bbox['y'] >= h: walls.append(Wall.South)
+        if bbox['x']+bbox['w'] >= w: walls.append(Wall.East)
+        if bbox['y']+bbox['h'] >= h: walls.append(Wall.South)
         
         return walls
 
@@ -46,6 +46,7 @@ def execute_wall_collision_response(c, vx, vy, walls):
         if Wall.East or Wall.West in walls: new_vy *= -1
         if Wall.North or Wall.South in walls: new_vx *= -1
 
+        print(vx, vy, new_vx, new_vy)
         return (new_vx, new_vy)
 
 def detect_circle_circle_collision(c1, c2):
