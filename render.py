@@ -69,14 +69,8 @@ def render_bullet(bullet, canvas):
 	x, y = bullet.circ.x, bullet.circ.y
 	cv.circle(canvas, (int(x), int(y)), bullet.circ.r, BLACK, -1)
 
-canv = None
-
 def render(agents, bullets, h, w):
-	global canv
-	if canv is None:
-		canv = 255 * np.ones((h, w), dtype=np.uint8)
-	else:
-		canv *= 0
+	canv = 255 * np.ones((h, w), dtype=np.uint8)
 	for agent in agents:
 		if agent.dead: continue
 		render_agent(agent, canv)
