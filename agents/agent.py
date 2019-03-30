@@ -43,7 +43,10 @@ class Agent(GameObject):
 
         walls_hit = co.detect_circle_wall_collisions(self.circ, *self.world_dims)
         if len(walls_hit) > 0:
-            self.vx, self.vy = co.execute_wall_collision_response(self.circ, self.vx, self.vy, walls_hit)  
+            d, v = co.execute_wall_collision_response(self.circ, self.vx, self.vy, walls_hit)  
+            self.vx, self.vy = v
+            dx, dy = d
+            self.circ = Circle(self.circ.x+dx, self.circ.y+dy, self.circ.r)
             self.walls_hit += len(walls_hit)
 
         for obj in objects:

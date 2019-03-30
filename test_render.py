@@ -13,7 +13,7 @@ x, y = 75, 125
 r = 10
 theta = 0
 fov = 20
-vx, vy = 50, 50
+vx, vy = 25, 25
 melee_r = 10
 m_theta = 75
 

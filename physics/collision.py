@@ -42,12 +42,17 @@ def execute_wall_collision_response(c, vx, vy, walls):
         """
 
         new_vx, new_vy = vx, vy
+        del_x, del_y = 0, 0
         
-        if Wall.East or Wall.West in walls: new_vy *= -1
-        if Wall.North or Wall.South in walls: new_vx *= -1
+        if Wall.East or Wall.West in walls: 
+            new_vy *= -1
+            del_x = 2
+        if Wall.North or Wall.South in walls: 
+            new_vx *= -1
+            del_y = 2
 
         print(vx, vy, new_vx, new_vy)
-        return (new_vx, new_vy)
+        return (del_x, del_y), (new_vx, new_vy)
 
 def detect_circle_circle_collision(c1, c2):
         '''
