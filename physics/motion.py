@@ -26,8 +26,6 @@ def update_velocity(lr, theta_step=5):
     Update the velocity of an agent given their steering angle
 
     Params:
-        vx: The x component of the velocity
-        vy: The y component
         lr: A SteeringDirection (left or right) 
         theta_step: The delta theta to use
 

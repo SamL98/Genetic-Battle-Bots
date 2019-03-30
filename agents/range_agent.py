@@ -17,8 +17,8 @@ class RangeAgent(Agent):
                         return
 
                 super().attack()
-                bullet = Bullet(self.circ.x, self.circ.y, self.circ.r,
-                                self.shot_magnitude * self.v,
+                bullet = Bullet(self.circ.x, self.circ.y, self.circ.r//3,
+                                self.shot_magnitude * self.v, self.theta,
                                 *self.world_dims, self) 
                 self.last_attack_time = time()
                 return bullet

@@ -14,11 +14,11 @@ def get_fov_line_params(x, y, theta):
 	return m, b
 
 def adjust_xy(x, y, ax, theta):
-	if -theta < 3*np.pi/2 and -theta > np.pi/2:
+	if theta < 3*np.pi/2 and theta > np.pi/2:
 		x *= -1
-	elif -theta == np.pi/2 or -theta == 3*np.pi/2:
+	elif theta == np.pi/2 or theta == 3*np.pi/2:
 		y = -x
-		if -theta == 3*np.pi/2: y = x
+		if theta == 3*np.pi/2: y = x
 		x = ax
 	return x, y
 
@@ -26,7 +26,7 @@ def render_agent(agent, canvas):
 	factor = 10
 	w = agent.world_dims[1] * factor
 
-	theta = -agent.theta*np.pi/180
+	theta = agent.theta*np.pi/180
 	fov = agent.fov*np.pi/180
 
 	circ = agent.circ

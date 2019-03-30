@@ -41,11 +41,12 @@ def execute_wall_collision_response(c, theta, walls):
                 The new (vx, vy) of the circle
         """
 
-        if Wall.East or Wall.West in walls: 
+        if Wall.East in walls or Wall.West in walls: 
             theta = 180 - theta
             if theta < 0:
                 theta += 360
-        if Wall.North or Wall.South in walls: 
+
+        if Wall.North in walls or Wall.South in walls: 
             theta = 360 - theta
 
         return theta
