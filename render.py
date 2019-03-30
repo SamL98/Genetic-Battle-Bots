@@ -72,7 +72,9 @@ def render_bullet(bullet, canvas):
 def render(agents, bullets, h, w):
 	canv = 255 * np.ones((h, w, 3), dtype=np.uint8)
 	for agent in agents:
+		if agent.dead: continue
 		render_agent(agent, canv)
 	for bullet in bullets:
+		if not bullet.in_world: continue
 		render_bullet(bullet, canv)
 	return canv
