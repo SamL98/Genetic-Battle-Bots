@@ -2,6 +2,7 @@ import agents.agent as ag
 from agents.range_agent import RangeAgent
 import nn
 import genetic as gen
+import numpy as np
 
 
 def orthonormal_vector(theta):
@@ -28,6 +29,24 @@ class World(object):
             ns_vec = np.array([np.cos(agent.theta), np.sin(agent.theta)])
             ew_vec = np.array([orthonormal_vector(agent.theta)])
             breakpoint()
+
+    def is_in_view(self, agent, obj):
+        theta = agent.theta*np.pi/180
+        fov = agent.fov*np.pi/180
+        x, y = agent.circ.x, agent.circ.y
+
+        m1 = np.tan(theta-fov/2)
+        b1 = y - m1*x
+
+        m2 = np.tan(theta+fov/2)
+        b2 = y - m2*x
+        
+        if theta > np.pi/2 and theta < 3*np.pi/2:
+            m1, m2 = m2, m1
+            b1, b2 = b2, b1
+            
+        ex, ey = obj.circ.x, obj.circ.y
+        return ey >= (m1*ex+b1) and ey <= (m2*ex + b2)
                 
     def collect_inputs(self):
         # Heading
@@ -42,6 +61,25 @@ class World(object):
         # Enemy present
         # Bullet present
         self.calc_rays()
+
+        enemy_present = [False] * len(self._agents)
+        for i, agent in enumerate(self._agents):
+            for enemy in self._agents:
+                if agent == enemy:
+                    continue
+
+                enemy_in_view = self.is_in_view(agent, enemy)
+                enemy_present[i] = enemy_in_view
+                if enemy_in_view:
+                    break
+
+        bullet_present = [False] * len(self._agents)
+        for i, agent in enumerate(self._agents):
+            for bullet in self._bullets:
+                bullet_in_view = self.is_in_view(agent, bullet)
+                bullet_present[i] = bullet_in_view
+                if bullet_in_view:
+                    break
             
     def process_ai(self):
         inputs = self.collect_inputs()

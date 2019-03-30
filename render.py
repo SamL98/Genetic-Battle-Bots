@@ -9,7 +9,7 @@ BLACK = (0, 0, 0)
 LW = 1
 
 def get_fov_line_params(x, y, theta):
-	m = np.arctan(theta)
+	m = np.tan(theta)
 	b = y - m*x
 	return m, b
 
@@ -20,8 +20,14 @@ def render_circ(agent, canvas):
 	theta = -agent.theta*np.pi/180
 	fov = agent.fov*np.pi/180
 
-	if -theta < 3*np.pi/2 and -theta >= np.pi/2:
-		w *= -1
+	x1, x2 = w, w
+	if theta < 3*np.pi/2 and theta > np.pi/2:
+		x1 *= -1
+		x2 *= -1
+	elif theta == np.pi/2:
+		x2 *= -1
+	elif theta == 3*np.pi/2:
+		x1 *= -1
 
 	circ = agent.circ
 	x, y = circ.x, circ.y
@@ -31,8 +37,8 @@ def render_circ(agent, canvas):
 
 	pts = np.array([
 		[x, y],
-		[w, m1*w + b1],
-		[w, m2*w + b2]
+		[x1, m1*x1 + b1],
+		[x2, m2*x2 + b2]
 	], dtype=np.int32)
 
 	cv.polylines(canvas, [pts], True, (0, 0, 0), LW)
