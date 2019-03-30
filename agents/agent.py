@@ -50,8 +50,8 @@ class Agent(GameObject):
             self.theta = co.execute_wall_collision_response(self.circ, self.theta, walls_hit)  
 
             x, y = self.circ.x, self.circ.y
-            x = min(max(0, x), self.world_dims[1])
-            y = min(max(0, y), self.world_dims[1])
+            x = min(max(self.circ.r, x), self.world_dims[1]-self.circ.r)
+            y = min(max(self.circ.r, y), self.world_dims[0]-self.circ.r)
 
             self.circ = Circle(x, y, self.circ.r)
             self.walls_hit += len(walls_hit)
@@ -71,6 +71,10 @@ class Agent(GameObject):
 
         xi, yi = self.circ.x, self.circ.y
         super().update(dt)
+
+        x = min(max(self.circ.r, self.circ.x), self.world_dims[1]-self.circ.r)
+        y = min(max(self.circ.r, self.circ.y), self.world_dims[0]-self.circ.r)
+        self.circ = Circle(x, y, self.circ.r)
 
         self.distance_moved += np.sqrt((self.circ.x-xi)**2 + (self.circ.y-yi)**2)
 
