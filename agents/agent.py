@@ -18,8 +18,8 @@ class AgentType(Enum):
     Normal = 'normal'
 
 class Agent(GameObject):
-    def __init__(self, x, y, r, theta, vx, vy, fov, world_w, world_h, num_lives):
-        super().__init__(x, y, r, vx, vy, world_w, world_h)
+    def __init__(self, x, y, r, v, theta, fov, world_w, world_h, num_lives):
+        super().__init__(x, y, r, v, theta, world_w, world_h)
         self.theta = theta
         self.theta_step = 5
         self.fov = fov
@@ -43,10 +43,12 @@ class Agent(GameObject):
         self.fov = max(self.fov, 0)
         self.fov = min(self.fov, 179.9)
 
-        walls_hit = co.detect_circle_wall_collisions(self.circ, self.vx, self.vy, *self.world_dims)
+        vx, vy = np.cos(self.theta*np.pi/180)*self.v, np.sin(self.theta*np.pi/180)*self.v
+        walls_hit = co.detect_circle_wall_collisions(self.circ, vx, vy, *self.world_dims)
+
         if len(walls_hit) > 0:
-            v = co.execute_wall_collision_response(self.circ, self.vx, self.vy, walls_hit)  
-            self.vx, self.vy = v
+            self.theta = co.execute_wall_collision_response(self.circ, self.theta, walls_hit)  
+
             x, y = self.circ.x, self.circ.y
             x = min(max(0, x), self.world_dims[1])
             y = min(max(0, y), self.world_dims[1])
@@ -64,8 +66,9 @@ class Agent(GameObject):
             if co.detect_circle_circle_collision(self.circ, obj.circ):
                 return
 
-        self.vx, self.vy, dtheta = mo.update_velocity(self.vx, self.vy, lr, self.theta_step)
+        dtheta = mo.update_velocity(lr, self.theta_step)
         self.theta += dtheta
+
         xi, yi = self.circ.x, self.circ.y
         super().update(dt)
 

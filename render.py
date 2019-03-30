@@ -64,3 +64,7 @@ def render_agent(agent, canvas):
 		m_theta = agent.m_theta
 		start = agent.theta - m_theta/2 
 		cv.ellipse(canvas, (int(x), int(y)), (rad, rad), 0, 360-start, 360-(start+m_theta), BLACK, LW)
+
+def render_bullet(bullet, canvas):
+	x, y = bullet.circ.x, bullet.circ.y
+	cv.circle(canvas, (int(x), int(y)), bullet.circ.r, BLACK, -1)

@@ -8,8 +8,8 @@ import physics.collision as co
 from time import time
 
 class MeleeAgent(Agent):
-	def __init__(self, x, y, r, theta, vx, vy, fov, w, h, num_lives, m_theta, m_r):
-		super().__init__(x, y, r, theta, vx, vy, fov, w, h, num_lives)
+	def __init__(self, x, y, r, v, theta, fov, w, h, num_lives, m_theta, m_r):
+		super().__init__(x, y, r, v, theta, fov, w, h, num_lives)
 		self.agent_type = AgentType.Melee
 		self.m_theta = m_theta
 		self.melee_r = m_r

@@ -21,7 +21,7 @@ def update_position(x, y, vx, vy, dt):
 
     return x + vx*dt, y + vy*dt
 
-def update_velocity(vx, vy, lr, theta_step=5):
+def update_velocity(lr, theta_step=5):
     '''
     Update the velocity of an agent given their steering angle
 
@@ -39,12 +39,4 @@ def update_velocity(vx, vy, lr, theta_step=5):
     if lr == SteeringDirection.Right:
         dtheta *= -1
 
-    c = np.cos(dtheta*np.pi/180)
-    s = np.sin(dtheta*np.pi/180)
-    R = np.array([
-        [c, -s],
-        [s, c]
-    ])
-
-    v = R.dot([vx, vy])
-    return (v[0], v[1], dtheta)
+    return dtheta

@@ -28,7 +28,7 @@ def detect_circle_wall_collisions(c, vx, vy, w, h):
         
         return walls
 
-def execute_wall_collision_response(c, vx, vy, walls):
+def execute_wall_collision_response(c, theta, walls):
         """     
         Updates the velocity of the circle depending on what walls it's colliding with
 
@@ -41,14 +41,14 @@ def execute_wall_collision_response(c, vx, vy, walls):
                 The new (vx, vy) of the circle
         """
 
-        new_vx, new_vy = vx, vy
-        
         if Wall.East or Wall.West in walls: 
-            new_vy *= -1
+            theta = 180 - theta
+            if theta < 0:
+                theta += 360
         if Wall.North or Wall.South in walls: 
-            new_vx *= -1
+            theta = 360 - theta
 
-        return (new_vx, new_vy)
+        return theta
 
 def detect_circle_circle_collision(c1, c2):
         '''

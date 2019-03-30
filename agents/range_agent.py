@@ -4,8 +4,8 @@ from .bullet import Bullet
 from time import time
 
 class RangeAgent(Agent):
-        def __init__(self, x, y, r, theta, vx, vy, fov, w, h, num_lives):
-                super().__init__(x, y, r, theta, vx, vy, fov, w, h, num_lives)
+        def __init__(self, x, y, r, theta, v, fov, w, h, num_lives):
+                super().__init__(x, y, r, v, theta, fov, w, h, num_lives)
                 self.agent_type = AgentType.Range
                 self.cooldown_time = 0.75
                 self.last_attack_time = 0
@@ -18,8 +18,7 @@ class RangeAgent(Agent):
 
                 super().attack()
                 bullet = Bullet(self.circ.x, self.circ.y, self.circ.r,
-                                self.shot_magnitude * self.vx,
-                                self.shot_magnitude * self.vy,
+                                self.shot_magnitude * self.v,
                                 *self.world_dims, self) 
                 self.last_attack_time = time()
                 return bullet
