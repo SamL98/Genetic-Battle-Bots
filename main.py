@@ -2,7 +2,8 @@ import agents.agent as ag
 from agents.range_agent import RangeAgent
 import nn
 import genetic as gen
-
+import numpy as np
+import time
 
 def orthonormal_vector(theta):
     tant = np.tan(theta)
@@ -17,9 +18,9 @@ class World(object):
     def __init__(self):
         self.world_h = 100
         self.world_w = 100
-        self._agents = [RangeAgent(25, 75, 5, 10, 0, 0, 45, self.world_h, self.world_w, 3),
-                        RangeAgent(75, 25, 5, 45, 0, 0, 45, self.world_h, self.world_w, 3)]
-        self._brains = gen.random_generation(2, (4, 10), (10, 10))
+        self._agents = [RangeAgent(25, 75, 5, 10, 1, 0, 45, self.world_h, self.world_w, 3),
+                        RangeAgent(75, 25, 5, 45, 0, 1, 45, self.world_h, self.world_w, 3)]
+        self._brains = gen.random_generation(2, (6, 10), (10, 10))
         self._bullets = []
 
         
@@ -74,7 +75,7 @@ class World(object):
         behav_vectors = nn.forward_prop(inputs, self._brains)
         phys_info = []
         for i, agent in enumerate(self._agents):
-            lr, dfov, bullets = agent.choose_actions(behav_vectors[i])
+            lr, dfov, bullets = agent.choose_action(behav_vectors[i])
             phys_info.append((lr, dfov))
             self._bullets.extend(bullets)
                 
@@ -86,6 +87,7 @@ class World(object):
                 
         for i, agent in enumerate(self._agents):
             agent.update(*phys_info[i], dt, self._agents)
+            print(agent.circ.y)
         
         
 class MainGame(object):
@@ -100,8 +102,8 @@ class MainGame(object):
         actions = self.world.process_ai()
         return actions
     
-    def update_physics(self, actions):
-        self.world.update_physics(actions)
+    def update_physics(self, actions, dt):
+        self.world.update_physics(actions, dt)
         
     def render(self):
         pass
@@ -114,8 +116,11 @@ if __name__ == "__main__":
     world = World()
     game = MainGame(world)
     
+    now = time.time()
     while keep_going:
         game.handle_input()
-        game.process_ai()
-        game.update_physics()
+        actions = game.process_ai()
+        game.update_physics(actions, now - time.time())
         game.render()
+        
+        now = time.time()
