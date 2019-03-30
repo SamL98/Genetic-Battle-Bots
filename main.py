@@ -25,11 +25,7 @@ def agent_fitness(agents):
     
     fitness = []
     for agent in agents:
-        
-        if agent.num_attacks > 0:
-            acc = agent.num_hits / agent.num_attacks
-        else:
-            acc = 0
+        acc = agent.num_hits / agent.num_attacks
         
         ind_fit = acc_weight * acc
         ind_fit += hit_weight * agent.num_hits
@@ -167,8 +163,7 @@ class World(object):
                 agent.update(*phys_info[i], dt, self._agents)
 
     def is_finished(self):
-        one_left = sum(agent.dead == False for agent in self._agents) == 1
-        return one_left
+        pass
         
         
 class MainGame(object):
@@ -191,7 +186,7 @@ class MainGame(object):
         cv.imshow('canvas', canvas)
         
     def is_finished(self):
-        return self.world.is_finished()
+        return False
     
 
 if __name__ == "__main__":
@@ -224,7 +219,7 @@ if __name__ == "__main__":
 
             if render:
                 game.render()
-                k = cv.waitKey(60)
+                k = cv.waitKey(1)
                 if k == 27:
                     break
 
