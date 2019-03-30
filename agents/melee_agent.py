@@ -29,3 +29,9 @@ class MeleeAgent(Agent):
 		super.attack()
 		self.melee_active = True
 		self.melee_arc = MeleeArc(self.melee_r, self.theta - self.m_theta/2, self.m_theta)
+
+	def choose_action(self, behavior_vec):
+		lr, dfov, shd_attack = self.choose_action(behavior_vec)
+		if shd_attack:
+			self.attack()
+		return lr, dfov, []

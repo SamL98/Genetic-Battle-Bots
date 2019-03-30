@@ -9,3 +9,10 @@ class RangeAgent(Agent):
 		super().attack()
 		bullet = Bullet(self.x, self.y, self.y, self.vx, self.vy, *self.world_dims, self) 
 		return bullet
+
+	def choose_action(self, behavior_vec):
+		lr, dfov, shd_attack = super().choose_action(behavior_vec)
+		bullets = []
+		if shd_attack:
+			bullets.append(self.attack())
+		return lr, dfov, bullets

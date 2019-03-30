@@ -2,8 +2,9 @@ import sys
 sys.path.insert(0, '..')
 
 from enum import Enum
-import math
+import numpy as np
 
+from steering_direction import SteeringDirection
 import physics.collision as co
 import physics.motion as mo
 
@@ -48,7 +49,7 @@ class Agent(GameObject):
 		xi, yi = self.circ.x, self.circ.y
 		super().update(dt)
 
-		self.distance_moved += math.sqrt((self.circ.x-xi)**2 + (self.circ.y-yi)**2)
+		self.distance_moved += np.sqrt((self.circ.x-xi)**2 + (self.circ.y-yi)**2)
 
 	def get_hit(self):
 		self.num_lives -= 1
@@ -58,3 +59,15 @@ class Agent(GameObject):
 
 	def attack(self):
 		self.num_attacks += 1
+
+	def choose_action(self, behavior_vec):
+		behavior = behavior_vec[:3]
+		
+		lr = SteeringDirection.Left
+		if behavior[0] >= 0:
+			lr = SteeringDirection.Right
+
+		dfov = np.tanh(behavior[1])
+		shd_attack behavior[2] >= 0
+
+		return lr, dfov, shd_attack
