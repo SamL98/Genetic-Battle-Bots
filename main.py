@@ -163,7 +163,8 @@ class World(object):
                 agent.update(*phys_info[i], dt, self._agents)
 
     def is_finished(self):
-        pass
+        one_left = sum(agent.dead == False for agent in self._agents) == 1
+        return one_left
         
         
 class MainGame(object):
@@ -186,7 +187,7 @@ class MainGame(object):
         cv.imshow('canvas', canvas)
         
     def is_finished(self):
-        return False
+        return self.world.is_finished()
     
 
 if __name__ == "__main__":
